@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "HelloWorld",
-    "slug": "expo-template-default",
+    "name": "QuickTicket",
+    "slug": "quickticket",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -13,13 +13,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tenxy.quickticket"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.tenxy.quickticket"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +33,18 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d6ba6bc9-7a8d-468c-a777-b58891aa552e"
+      }
+    },
+    "owner": "tenxy",
+    "updates": {
+      "url": "https://u.expo.dev/d6ba6bc9-7a8d-468c-a777-b58891aa552e"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
