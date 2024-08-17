@@ -1,3 +1,4 @@
+// app/_layout.js
 import React from 'react';
 import '@walletconnect/react-native-compat';
 import { WagmiProvider } from 'wagmi';
@@ -13,11 +14,11 @@ const projectId = '0c870bf821194d9d4a6c46e9bdf2131b';
 const metadata = {
   name: 'Event Ticket Platform',
   description: 'Buy and sell event tickets',
-  url: 'https://yourwebsite.com',
-  icons: ['https://youriconurl.com'],
+  url: 'https://quickticket.studio',
+  icons: ['https://i.ibb.co/z7ywJWb/Quick-Ticket.png'],
   redirect: {
-    native: 'YOUR_APP_SCHEME://',
-    universal: 'YOUR_APP_UNIVERSAL_LINK.com'
+    native: 'QuickTicket://',
+    universal: 'https://quickticket.studio'
   }
 };
 
@@ -44,7 +45,7 @@ export default function RootLayout() {
       <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="create" />
             <Stack.Screen name="event/[id]" />
           </Stack>

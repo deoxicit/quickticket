@@ -5,8 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { W3mButton } from '@web3modal/wagmi-react-native';
 import { useReadContract, useReadContracts } from 'wagmi';
 import { CONTRACT_ADDRESS, TYPED_CONTRACT_ABI } from '@/contract/contractConfig';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 const EVENTS_PER_PAGE = 10;
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 export default function Home() {
   const router = useRouter();
@@ -69,7 +71,7 @@ export default function Home() {
     setLoadingMore(false);
   }, [events, eventCount, currentPage, loadingMore, fetchEvents]);
 
-  const renderEventItem = useCallback(({ item }: { item: any }) => {
+  const renderEventItem = useCallback(({ item, index }: { item: any; index: number }) => {
     if (!Array.isArray(item.result) || item.result.length !== 11) {
       console.error('Invalid event item:', item);
       return null;
@@ -78,8 +80,7 @@ export default function Home() {
     const [id, creator, name, date, ticketPrice, maxParticipants, ticketsSold, isActive, imageUrl, description, location] = item.result;
 
     const safeFormat = (value: bigint | number | undefined) => {
-      if (value === undefined || value === null) return 'N/A';
-      return value.toString();
+      return `${(Number(value) / 1e18).toFixed(4)} ETH`;
     };
 
     const safeFormatDate = (value: bigint | undefined) => {
@@ -89,22 +90,27 @@ export default function Home() {
     };
 
     return (
-      <TouchableOpacity
+      <Animated.View
+        entering={FadeInDown.delay(index * 100).springify()}
         className="bg-white p-4 mb-4 rounded-lg shadow-md"
-        onPress={() => router.push(`/event/${id.toString()}`)}
       >
-        <Image
-          source={{ uri: imageUrl }}
-          className="w-full h-40 rounded-lg mb-2"
-        />
-        <Text className="text-xl font-bold mb-1">{name || 'Unnamed Event'}</Text>
-        <Text className="text-gray-600 mb-1">{safeFormatDate(date)}</Text>
-        <Text className="text-green-600 font-bold">{safeFormat(ticketPrice)} ETH</Text>
-        <Text className="text-gray-600 mb-1">
-          Tickets sold: {safeFormat(ticketsSold)} / {safeFormat(maxParticipants)}
-        </Text>
-        <Text className="text-gray-600">{location}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-white p-4 mb-4 rounded-lg shadow-md"
+          onPress={() => router.push(`/event/${id.toString()}`)}
+        >
+          <Image
+            source={{ uri: imageUrl }}
+            className="w-full h-40 rounded-lg mb-2"
+          />
+          <Text className="text-xl font-bold mb-1">{name || 'Unnamed Event'}</Text>
+          <Text className="text-gray-600 mb-1">{safeFormatDate(date)}</Text>
+          <Text className="text-green-600 font-bold">{safeFormat(ticketPrice)} ETH</Text>
+          <Text className="text-gray-600 mb-1">
+            Tickets sold: {safeFormat(ticketsSold)} / {safeFormat(maxParticipants)}
+          </Text>
+          <Text className="text-gray-600">{location}</Text>
+        </TouchableOpacity>
+      </Animated.View>
     );
   }, [router]);
 
@@ -119,41 +125,34 @@ export default function Home() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
-      <View className="flex-1 p-4">
-        <View className="flex-row justify-between items-center mb-4">
-          <Text className="text-2xl font-bold">Events</Text>
-          <Pressable className="bg-slate-300 rounded-full">
-            <W3mButton />
-          </Pressable>
-        </View>
-        {isEventCountLoading ? (
-          <Text>Loading event count...</Text>
-        ) : isEventCountError ? (
-          <Text>Error loading event count: {eventCountError?.message}</Text>
-        ) : eventCount === 0n ? (
-          <Text>No events have been created yet.</Text>
-        ) : (
-          <FlatList
-            ref={flatListRef}
-            data={events}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderEventItem}
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            onEndReached={loadingMore ? null : loadMoreEvents}
-            onEndReachedThreshold={0.1}
-            ListFooterComponent={renderFooter}
-          />
-        )}
-        <Pressable
-          className="bg-green-500 py-3 rounded-full mt-4"
-          onPress={() => router.push('/create')}
-        >
-          <Text className="text-white text-center text-lg">Create Event</Text>
+    <View className="flex-1 p-4">
+      <View className="flex-row justify-between items-center mb-4">
+        <Text className="text-2xl font-bold">Events</Text>
+        <Pressable className="bg-slate-300 rounded-full">
+          <W3mButton />
         </Pressable>
       </View>
-    </SafeAreaView>
+      {isEventCountLoading ? (
+        <Text>Loading event count...</Text>
+      ) : isEventCountError ? (
+        <Text>Error loading event count: {eventCountError?.message}</Text>
+      ) : eventCount === 0n ? (
+        <Text>No events have been created yet.</Text>
+      ) : (
+        <AnimatedFlatList
+          data={events}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderEventItem}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          onEndReached={loadingMore ? null : loadMoreEvents}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={renderFooter}
+        />
+      )}
+    </View>
+  </SafeAreaView>
   );
 }

@@ -4,7 +4,7 @@
     "slug": "quickticket",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Splashscreen.png",
+    "icon": "./assets/icons/QuickTicket.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/QuickTicket.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.tenxy.quickticket"
@@ -26,7 +26,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/icons/QuickTicket.png"
     },
     "plugins": [
       "expo-router",

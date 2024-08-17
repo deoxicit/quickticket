@@ -75,8 +75,7 @@ export default function EventDetails() {
     };
 
     const formatEth = (value: bigint) => {
-        if (value === undefined || value === null) return 'N/A';
-        return value.toString() + " ETH";
+        return `${(Number(value) / 1e18).toFixed(4)} ETH`;
     };
 
     return (
