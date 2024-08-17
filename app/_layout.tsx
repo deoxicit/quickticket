@@ -1,8 +1,7 @@
-// app/_layout.tsx
 import React from 'react';
 import '@walletconnect/react-native-compat';
 import { WagmiProvider } from 'wagmi';
-import { mainnet, polygon, arbitrum } from '@wagmi/core/chains';
+import { arbitrumSepolia, polygonAmoy, sepolia } from '@wagmi/core/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native';
 import { emailConnector } from '@web3modal/email-wagmi-react-native';
@@ -23,7 +22,7 @@ const metadata = {
 };
 
 const email = emailConnector({ projectId, metadata });
-const chains = [mainnet, polygon, arbitrum] as const;
+const chains = [sepolia, polygonAmoy ,arbitrumSepolia] as const;
 
 const wagmiConfig = defaultWagmiConfig({
   chains,
@@ -35,7 +34,7 @@ const wagmiConfig = defaultWagmiConfig({
 createWeb3Modal({
   projectId,
   wagmiConfig,
-  defaultChain: mainnet,
+  defaultChain: sepolia,
   enableAnalytics: true
 });
 
