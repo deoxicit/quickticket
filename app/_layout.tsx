@@ -12,12 +12,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 const queryClient = new QueryClient();
 const projectId = '0c870bf821194d9d4a6c46e9bdf2131b';
 const metadata = {
-  name: 'Event Ticket Platform',
+  name: 'QuickTicket',
   description: 'Buy and sell event tickets',
   url: 'https://quickticket.studio',
-  icons: ['https://i.ibb.co/z7ywJWb/Quick-Ticket.png'],
+  icons: ['./assets/icons/QuickTicket.png'],
   redirect: {
-    native: 'QuickTicket://',
+    native: 'Myapp://',
     universal: 'https://quickticket.studio'
   }
 };

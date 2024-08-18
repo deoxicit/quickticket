@@ -21,7 +21,7 @@ export default function TabsLayout() {
           } else if (route.name === 'profile') {
             iconName = 'person';
           } else {
-            iconName = 'help-circle'; // default icon
+            iconName = 'swap-horizontal-outline'; // default icon
           }
 
           const animatedIconStyle = useAnimatedStyle(() => {
@@ -56,12 +56,14 @@ export default function TabsLayout() {
         ),
         headerShown: false,
         tabBarStyle: { 
-          backgroundColor: 'white',
+          position: 'absolute',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)', 
           borderTopWidth: 0,
-          elevation: 0,
+          elevation: 10,
           height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
+          borderRadius : 60,
+          margin:8,
+          bottom: 16, // Adjust this value to position the tab bar
         },
         tabBarItemStyle: {
           padding: 5,
