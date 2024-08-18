@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Pressable, RefreshControl, ActivityIndicator, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Pressable, RefreshControl, ActivityIndicator, Image, ListRenderItem } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { W3mButton } from '@web3modal/wagmi-react-native';
@@ -85,7 +85,7 @@ export default function ProfileScreen() {
     setRefreshing(false);
   }, [refetchPurchasedTickets, refetchEventDetails]);
 
-  const renderEventItem = useCallback(({ item, index }: { item: PurchasedEvent; index: number }) => {
+  const renderEventItem: ListRenderItem<PurchasedEvent> = useCallback(({ item, index }) => {
     const [id, creator, name, date, ticketPrice, maxParticipants, ticketsSold, isActive, imageUrl, description, location] = item.result;
 
     const safeFormatDate = (value: bigint) => {
@@ -126,9 +126,14 @@ export default function ProfileScreen() {
     <SafeAreaView className="flex-1 bg-gray-100" edges={['top']}>
       <View className="flex-1">
         <View className="flex-row justify-between items-center mb-4 p-4">
-          <Text className="text-2xl font-bold">Profile</Text>
           <Pressable className="bg-slate-300 rounded-full">
             <W3mButton />
+          </Pressable>
+          <Pressable
+            className="bg-blue-500 px-3 py-2 rounded-full "
+            onPress={() => router.push('/create')}
+          >
+            <Text className="text-white text-center text-lg">Create Event</Text>
           </Pressable>
         </View>
         {!isConnected ? (
@@ -140,7 +145,7 @@ export default function ProfileScreen() {
         ) : purchasedEvents.length > 0 ? (
           <>
             <Text className="text-lg font-semibold mb-2 px-4">Total Tickets Purchased: {totalTicketsPurchased}</Text>
-            <AnimatedFlatList
+            <AnimatedFlatList<PurchasedEvent>
               contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
               data={purchasedEvents}
               keyExtractor={(item) => item.result[0].toString()}

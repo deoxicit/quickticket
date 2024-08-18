@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Pressable, ScrollView, Alert } from 'react-native';
 import { useWeb3Modal } from '@web3modal/wagmi-react-native';
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,11 +23,27 @@ export default function CreateEvent() {
 
   const { writeContract, data: hash, error, isPending } = useWriteContract();
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = 
-    useWaitForTransactionReceipt({ 
-      hash, 
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
     });
 
+  useEffect(() => {
+    if (isConfirmed) {
+      Alert.alert(
+        "Success",
+        "Event created successfully!",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              router.replace('/');
+            }
+          }
+        ]
+      );
+    }
+  }, [isConfirmed, router]);
   const handleCreateEvent = () => {
     if (!isConnected) {
       openWeb3Modal();
@@ -69,7 +85,7 @@ export default function CreateEvent() {
           value={imageUrl}
           onChangeText={setImageUrl}
         />
-        <Pressable 
+        <Pressable
           className="border border-gray-300 p-2 rounded-lg mb-4"
           onPress={() => setOpen(true)}
         >
@@ -115,7 +131,7 @@ export default function CreateEvent() {
           value={location}
           onChangeText={setLocation}
         />
-        <Pressable 
+        <Pressable
           className={`py-3 rounded-full mb-4 ${isPending || isConfirming ? 'bg-gray-400' : 'bg-blue-500'}`}
           onPress={handleCreateEvent}
           disabled={isPending || isConfirming}
@@ -128,9 +144,9 @@ export default function CreateEvent() {
         {isConfirming && <Text className="text-sm text-blue-600 mb-2">Waiting for confirmation...</Text>}
         {isConfirmed && <Text className="text-sm text-green-600 mb-2">Event created successfully!</Text>}
         {error && (
-          <Text className="text-sm text-red-600 mb-2">Error: {error.message}</Text>
+          <Text className="text-sm text-red-600 mb-2">Error: "Please set the event time to future"</Text>
         )}
-        <Pressable 
+        <Pressable
           className="py-3 rounded-full border border-gray-300"
           onPress={() => router.back()}
         >
