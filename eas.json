@@ -28,7 +28,7 @@
     "production": {
       "channel": "production",
       "android": {
-        "image": "latest"
+        "buildType": "apk"
       },
       "ios": {
         "image": "latest"
