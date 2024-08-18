@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Pressable, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
@@ -29,6 +29,15 @@ export default function EventDetails() {
         useWaitForTransactionReceipt({
             hash,
         });
+
+
+    useEffect(() => {
+        if (isConfirmed) {
+            // Redirect to profile page after successful transaction
+            router.push('/profile');
+        }
+    }, [isConfirmed, router]);
+
 
     const handleBuyTicket = () => {
         if (!isConnected) {
@@ -108,7 +117,7 @@ export default function EventDetails() {
 
                     <Text className="text-xl font-bold mb-2">About this event</Text>
                     <Text className="text-base mb-4">{eventData[9]}</Text>
-                    
+
                     <View className="bg-gray-100 p-4 rounded-lg mb-4">
                         <Text className="text-lg mb-2">🗓 {formatDate(Number(eventData[3]))}</Text>
                         <Text className="text-lg mb-2">📍 {eventData[10]}</Text>
